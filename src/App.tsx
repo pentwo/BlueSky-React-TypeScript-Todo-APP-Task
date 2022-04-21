@@ -1,85 +1,69 @@
-import React, { useState, createContext, useEffect, useReducer } from "react";
-import { Box, Button, Container } from "@material-ui/core";
-import axios from "axios";
+import React, { useState, useEffect, createRef } from "react";
+import { useReducerAsync } from "use-reducer-async";
+import { Box, Button, Container, Modal } from "@material-ui/core";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 import "./App.css";
-import { MyGlobalContext } from "./context/GlobalContext";
-import { Todo, User } from "./types";
 import SearchField from "./components/SearchField";
 import TodoList from "./components/TodoList";
+import AddTask from "./components/AddTask";
 
 // New implementation
 import { initialState } from "./state/state";
-import { stateReducer } from "./state/reducer";
+import { stateReducer, asyncActionHandlers } from "./state/reducer";
 import { GlobalContext } from "./state/context";
+import { REFRESH_TODO, REFRESH_USER } from "./state/actions";
 
 function App() {
-  // const [state, dispatch] = useReducer(stateReducer, initialState);
+  const [state, dispatch] = useReducerAsync(
+    stateReducer,
+    initialState,
+    asyncActionHandlers
+  );
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState({
+    name: "",
+    user: "",
+    isComplete: false,
+  });
 
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
+  const myModalRef = createRef();
 
-  async function getTodos() {
-    try {
-      const { todos } = await axios
-        .get("api/todos")
-        .then((response) => response.data);
+  const handleModalOpen = () => {
+    setOpen(true);
+  };
 
-      setTodos(todos);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  async function getUsers() {
-    try {
-      const { users } = await axios
-        .get("api/users")
-        .then((response) => response.data);
-
-      setUsers(users);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  async function deleteTodo(id: string) {
-    try {
-      const result = await axios
-        .delete(`api/todo/${id}/delete`)
-        .then((response) => response);
-
-      console.log("result: ", result);
-      getTodos();
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const handleModalClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
-    // dispatch(UpdateTodoList());
-    getTodos();
-    getUsers();
+    dispatch({ type: REFRESH_TODO });
+    dispatch({ type: REFRESH_USER });
   }, []);
 
   return (
-    // <GlobalContext.Provider value={{ state, dispatch }}>
-    <MyGlobalContext.Provider
-      value={{ todos, setTodos, deleteTodo, users, setUsers }}
-    >
+    <GlobalContext.Provider value={{ state, dispatch }}>
       <div className="App">
         <Container maxWidth="md">
-          <SearchField />
+          <SearchField setSearch={setSearch} />
           <TodoList />
           <Box display="flex" flexDirection="row-reverse">
-            <Button variant="contained">Add Task</Button>
+            <Button
+              variant="contained"
+              onClick={handleModalOpen}
+              startIcon={<AddCircleOutlineIcon />}
+            >
+              Add Task
+            </Button>
           </Box>
         </Container>
+        <Modal open={open} onClose={handleModalClose}>
+          <AddTask handleModalClose={handleModalClose} />
+        </Modal>
       </div>
-    </MyGlobalContext.Provider>
-    // </GlobalContext.Provider>
+    </GlobalContext.Provider>
   );
 }
 
 export default App;
-function UpdateTodoList(): import("./state/actions").StateActions {
-  throw new Error("Function not implemented.");
-}

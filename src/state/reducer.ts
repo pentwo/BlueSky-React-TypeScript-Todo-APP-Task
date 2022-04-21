@@ -1,48 +1,64 @@
-import axios from "axios";
+// @ts-nocheck
+import { Dispatch, Reducer, ReducerAction, ReducerState } from "react";
+import { AsyncActionHandlers } from "use-reducer-async";
+
+import { addTodo, getTodos, deleteTodo } from "../Util/Todo";
+import { getUsers } from "../Util/User";
 import { ActionTypes, StateActions } from "./actions";
-import { GlobalState, Todo } from "./state";
+import { GlobalState } from "./state";
 
 export function stateReducer(
   state: GlobalState,
   action: StateActions
 ): GlobalState {
+  // console.log(`Reducer-${action.type} -> Action: `, action);
   switch (action.type) {
-    // case ActionTypes.UpdateTodoList:
+    case ActionTypes.RefreshTodoList:
+      return { ...state, todos: [...action.payload] };
+    case ActionTypes.RefreshUserList:
+      return { ...state, users: [...action.payload] };
 
     case ActionTypes.AddTodo:
       return { ...state, todos: [action.payload, ...state.todos] };
 
     case ActionTypes.EditTodo:
+      const todo = action.payload;
+
       return { ...state };
 
-    case ActionTypes.DeleteTodo:
-      // deleteTodo(action.payload.id);
-      return { ...state };
     default:
-      return state;
+      return { ...state };
   }
 }
 
-async function deleteTodo(id: number) {
-  try {
-    const result = await axios
-      .delete(`api/todo/${id}/delete`)
-      .then((response) => response);
+export const asyncActionHandlers = {
+  ADD_AND_REFRESH_TODO:
+    ({ dispatch }) =>
+    async (action) => {
+      console.log("ADD_AND_REFRESH_TODO-PAYLOAD", action.payload);
+      const result = await addTodo(action.payload);
 
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-}
+      dispatch({ type: "REFRESH_TODO" });
+    },
+  REFRESH_TODO:
+    ({ dispatch }) =>
+    async (action) => {
+      const result = await getTodos();
 
-async function getTodos() {
-  try {
-    const { todos } = await axios
-      .get("api/todos")
-      .then((response) => response.data);
+      dispatch({ type: ActionTypes.RefreshTodoList, payload: result });
+    },
+  REFRESH_USER:
+    ({ dispatch }) =>
+    async (action) => {
+      const result = await getUsers();
 
-    return todos;
-  } catch (error) {
-    console.error(error);
-  }
-}
+      dispatch({ type: ActionTypes.RefreshUserList, payload: result });
+    },
+  DELETE_AND_REFRESH_TODO:
+    ({ dispatch }) =>
+    async (action) => {
+      const result = await deleteTodo(action.payload.id);
+
+      dispatch({ type: "REFRESH_TODO" });
+    },
+};

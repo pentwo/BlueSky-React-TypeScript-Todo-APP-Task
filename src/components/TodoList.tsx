@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Box,
   makeStyles,
   Paper,
   Table,
@@ -17,8 +16,8 @@ import CheckCircleOutlineOutlinedIcon from "@material-ui/icons/CheckCircleOutlin
 import RadioButtonUncheckedOutlinedIcon from "@material-ui/icons/RadioButtonUncheckedOutlined";
 
 import { Todo, User } from "../types";
-import { useGlobalContext } from "../context/GlobalContext";
-import Switch from "./Switch";
+import { useGlobalContext } from "../state/context";
+import { DELETE_AND_REFRESH_TODO } from "../state/actions";
 
 const useStyles = makeStyles({
   table: {
@@ -32,45 +31,13 @@ export default function TodoList() {
   const globalContext = useGlobalContext();
   if (!globalContext) return null;
 
-  const { todos, setTodos, deleteTodo, users } = globalContext;
+  const { state, dispatch } = globalContext;
+  const { todos, users } = state;
 
   function handleFilter(e: React.MouseEvent) {
     const target = e.currentTarget.childNodes[0].nodeValue;
-    console.log("e.currentTarget: ", e.currentTarget);
+    // console.log("e.currentTarget: ", e.currentTarget);
     if (!target) return;
-
-    let result: Todo[];
-    switch (target?.toLowerCase()) {
-      case "name":
-        result = todos.sort((a, b) => {
-          return a.name.localeCompare(b.name, "en", { caseFirst: "lower" });
-          // if (b.name > a.name) return -1;
-          // if (b.name < a.name) return 1;
-          // return 0;
-        });
-        setTodos([...result]);
-        break;
-
-      case "user":
-        result = todos.sort((a, b) => {
-          return parseInt(b.user) - parseInt(a.user);
-        });
-        setTodos([...result]);
-        break;
-
-      case "completed":
-        result = todos.sort((a, b) => {
-          if (b.isComplete > a.isComplete) return 1;
-          if (b.isComplete < a.isComplete) return -1;
-          return 0;
-        });
-        setTodos([...result]);
-        break;
-
-      default:
-        setTodos([...todos]);
-        break;
-    }
   }
 
   function handleEdit(e: React.MouseEvent) {
@@ -85,7 +52,7 @@ export default function TodoList() {
     console.log("e.currentTarget : ", e.currentTarget);
     const id = e.currentTarget.getAttribute("data-delete")?.split("-")[1];
     if (id) {
-      deleteTodo(id);
+      dispatch({ type: DELETE_AND_REFRESH_TODO, payload: { id: id } });
     }
   }
 
@@ -93,8 +60,8 @@ export default function TodoList() {
     <TableContainer className={classes.table} component={Paper}>
       <Table aria-label="todo table">
         <TableHead>
-          <TableRow component="th">
-            <TableCell onClick={handleFilter}>Name</TableCell>
+          <TableRow>
+            <TableCell onClick={handleFilter}>Project Name</TableCell>
             <TableCell align="center" onClick={handleFilter}>
               User
             </TableCell>

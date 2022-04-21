@@ -1,11 +1,13 @@
-import React from "react";
-import { StateActions } from "./actions";
+import { Dispatch, createContext, useContext } from "react";
+import { Actions } from "./actions";
 import { GlobalState, initialState } from "./state";
 
-export const GlobalContext = React.createContext<{
+export const GlobalContext = createContext<{
   state: GlobalState;
-  dispatch: React.Dispatch<StateActions>;
+  dispatch: Dispatch<Actions>;
 }>({
   state: initialState,
   dispatch: () => undefined,
 });
+
+export const useGlobalContext = () => useContext(GlobalContext);
