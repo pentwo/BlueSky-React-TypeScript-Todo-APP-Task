@@ -1,17 +1,5 @@
 import axios from "axios";
-import { Todo } from "../types";
-
-export async function deleteTodo(id: number) {
-  try {
-    const result = await axios
-      .delete(`api/todo/${id}/delete`)
-      .then((response) => response);
-
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-}
+import { Todo } from "../state/state";
 
 export async function getTodos() {
   try {
@@ -31,6 +19,31 @@ export async function addTodo(payload: Todo) {
       .post(`api/todo/create`, {
         ...payload,
       })
+      .then((response) => response);
+
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function editTodo(id: string) {
+  try {
+    const { todo } = await axios
+      .get(`api/todo/${id}`)
+      .then((response) => response.data);
+
+    console.log("todo: ", todo);
+    return todo;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function deleteTodo(id: number) {
+  try {
+    const result = await axios
+      .delete(`api/todo/${id}/delete`)
       .then((response) => response);
 
     return result;

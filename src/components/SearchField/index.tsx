@@ -29,17 +29,14 @@ export default function SearchField({ setSearch }: SearchFieldProps) {
     >
       <Grid item>
         <ProjectInputField
+          editTodo={state.TempTodo}
           label="Project Name"
           setState={setSearch}
           inputName="searchInput"
         />
       </Grid>
       <Grid item>
-        <UserSelect
-          users={users}
-          setState={setSearch}
-          inputName="searchSelect"
-        />
+        <UserSelect setState={setSearch} inputName="searchSelect" />
       </Grid>
       <Grid item>
         <Switch checked={false} setState={setSearch} />

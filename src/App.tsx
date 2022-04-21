@@ -27,8 +27,6 @@ function App() {
     isComplete: false,
   });
 
-  const myModalRef = createRef();
-
   const handleModalOpen = () => {
     setOpen(true);
   };

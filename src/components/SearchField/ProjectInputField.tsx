@@ -1,6 +1,9 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ActionTypes } from "../../state/actions";
+import { useGlobalContext } from "../../state/context";
+import { TempTodo } from "../../state/state";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface ProjectInputField {
   label: string;
+  editTodo?: TempTodo;
   inputName: string;
   setState: Dispatch<
     SetStateAction<{ name: string; user: string; isComplete: boolean }>
@@ -25,18 +29,39 @@ interface ProjectInputField {
 export default function ProjectInputField({
   label,
   inputName,
+  editTodo,
   setState,
 }: ProjectInputField) {
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
+  const classes = useStyles();
+  const [value, setValue] = useState("");
 
-    console.log(`TextField: ${name}`, e.target.value);
+  const globalContext = useGlobalContext();
+  const { state, dispatch } = globalContext;
+
+  useEffect(() => {
+    if (state.TempTodo) {
+      setValue(state.TempTodo.name);
+    }
+  }, [state.TempTodo]);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+
+    setValue(value);
+
     setState((pre) => {
       return { ...pre, name: value };
     });
+
+    if (state.TempTodo) {
+      dispatch({
+        type: ActionTypes.EditTodo,
+        payload: { ...state.TempTodo, name: value },
+      });
+    }
   }
 
-  const classes = useStyles();
+  if (!globalContext) return null;
   return (
     <TextField
       className={classes.TextField}
@@ -45,6 +70,7 @@ export default function ProjectInputField({
       name={inputName}
       variant="outlined"
       onChange={handleChange}
+      value={value}
     />
   );
 }

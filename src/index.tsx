@@ -4,21 +4,21 @@ import "./index.css";
 import App from "./App";
 
 import {
-  createMuiTheme,
   ThemeProvider,
   unstable_createMuiStrictModeTheme,
 } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import * as serviceWorker from "./serviceWorker";
 import { makeServer } from "./Server/server";
 
 const server = makeServer();
 
 // For Warning: findDOMNode is deprecated in StrictMode.
-const createTheme =
+const createThemeCustom =
   process.env.NODE_ENV === "production"
-    ? createMuiTheme
+    ? createTheme
     : unstable_createMuiStrictModeTheme;
-const theme = createTheme({
+const theme = createThemeCustom({
   // ...
 });
 

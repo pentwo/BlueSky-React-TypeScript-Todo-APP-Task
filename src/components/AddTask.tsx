@@ -2,14 +2,14 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
-import React, { Ref, useState } from "react";
+import React, { Ref, useEffect, useState } from "react";
 
-import { Todo } from "../types";
 import { useGlobalContext } from "../state/context";
 import ProjectInputField from "./SearchField/ProjectInputField";
 import UserSelect from "./SearchField/UserSelect";
 import Switch from "./SearchField/Switch";
 import { ADD_AND_REFRESH_TODO } from "../state/actions";
+import { TempTodo } from "../state/state";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,16 +28,29 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface AddTask {
+  label?: string;
   handleModalClose: () => void;
+  payload?: TempTodo;
 }
 
-export default function AddTask({ handleModalClose }: AddTask) {
+export default function AddTask({
+  label = "Add Task",
+  handleModalClose,
+  payload,
+}: AddTask) {
   const classes = useStyles();
   const [newTodo, setNewTodo] = useState({
     name: "",
     user: "",
     isComplete: false,
   });
+  useEffect(() => {
+    // if (payload) {
+    //   const { name, userId, isComplete } = payload;
+    //   setNewTodo({ name, user, isComplete });
+    //   console.log("payload: ", payload);
+    // }
+  }, []);
 
   const globalContext = useGlobalContext();
   if (!globalContext) return null;
@@ -53,17 +66,13 @@ export default function AddTask({ handleModalClose }: AddTask) {
   return (
     <div>
       <Box className={classes.paper} display="flex" flexDirection="column">
-        <h2>AddTask</h2>
+        <h2>{label}</h2>
         <ProjectInputField
           label="Project Name"
           setState={setNewTodo}
           inputName="newTodoInput"
         />
-        <UserSelect
-          users={users}
-          setState={setNewTodo}
-          inputName="newTodoSelect"
-        />
+        <UserSelect setState={setNewTodo} inputName="newTodoSelect" />
         <Switch checked={false} setState={setNewTodo} />
         <Button
           variant="contained"

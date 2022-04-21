@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Todo, User } from "../types";
+import { Todo, User } from "../state/state";
 
 export type GlobalContext = {
   todos: Todo[];

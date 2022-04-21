@@ -1,4 +1,4 @@
-import { Todo, User } from "./state";
+import { Todo, User, TempTodo } from "./state";
 
 // normal reducer actions
 export enum ActionTypes {
@@ -14,6 +14,9 @@ export enum ActionTypes {
 
 export const ADD_AND_REFRESH_TODO = "ADD_AND_REFRESH_TODO";
 export const DELETE_AND_REFRESH_TODO = "DELETE_AND_REFRESH_TODO";
+export const GET_EDIT_AND_REFRESH_TODO = "GET_EDIT_AND_REFRESH_TODO";
+export const SAVE_EDIT_TODO_AND_REFRESH_TODO =
+  "SAVE_EDIT_TODO_AND_REFRESH_TODO";
 export const REFRESH_TODO = "REFRESH_TODO";
 export const REFRESH_USER = "REFRESH_USER";
 
@@ -32,12 +35,21 @@ export interface AddTodo {
 }
 export interface EditTodo {
   type: ActionTypes.EditTodo;
-  payload: Todo;
+  // payload: { userId: string };
+  payload: TempTodo;
 }
 
 export interface AddAndRefreshTodo {
   type: "ADD_AND_REFRESH_TODO";
   payload: { name: string; user: string; isComplete: boolean };
+}
+export interface EditAndRefreshTodo {
+  type: "GET_EDIT_AND_REFRESH_TODO";
+  payload: { id: string };
+}
+export interface SaveEditAndRefreshTodo {
+  type: "SAVE_EDIT_TODO_AND_REFRESH_TODO";
+  payload: TempTodo;
 }
 
 export interface DeleteAndRefreshTodo {
@@ -52,21 +64,15 @@ export interface RefreshUser {
   type: "REFRESH_USER";
 }
 
-// export interface DeleteTodo {
-//   type: ActionTypes.DeleteTodo;
-//   payload: { id: number };
-// }
-
 export type StateActions =
   | RefreshTodoList
   | RefreshUserList
   | AddTodo
   | EditTodo
   | AddAndRefreshTodo
+  | EditAndRefreshTodo
   | DeleteAndRefreshTodo
   | RefreshTodo
   | RefreshUser;
-
-// | DeleteTodo;
 
 export type Actions = StateActions;

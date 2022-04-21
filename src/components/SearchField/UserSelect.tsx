@@ -1,11 +1,14 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 
-import { User } from "../../types";
+import { TempTodo, User } from "../../state/state";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+
+import { ActionTypes } from "../../state/actions";
+import { useGlobalContext } from "../../state/context";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,29 +23,44 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface UserSelect {
-  users: User[];
   inputName: string;
-
+  // editTodo: EditTodo;
   setState: Dispatch<
     SetStateAction<{ name: string; user: string; isComplete: boolean }>
   >;
 }
 
-export default function UserSelect({ users, inputName, setState }: UserSelect) {
+export default function UserSelect({ inputName, setState }: UserSelect) {
   const classes = useStyles();
   const [select, setSelect] = useState<string>("");
+  const globalContext = useGlobalContext();
+
+  const { state, dispatch } = globalContext;
+
+  useEffect(() => {
+    if (state.TempTodo) {
+      setSelect(state.TempTodo.userId);
+    }
+  }, [state.TempTodo, select]);
+
+  if (!globalContext) return null;
 
   function handleChange(
     e: React.ChangeEvent<{ name?: string; value: unknown }>
   ) {
     const value = e.target.value as string;
-    // const { name as string, value as string }= e.target;
-    // console.log("Select state changed: ", select);
+
     setSelect(value);
-    console.log(`Select: ${e.target.name as string}`, value);
+
     setState((pre) => {
       return { ...pre, user: value };
     });
+    if (state.TempTodo) {
+      dispatch({
+        type: ActionTypes.EditTodo,
+        payload: { ...state.TempTodo, userId: value },
+      });
+    }
   }
 
   return (
@@ -54,7 +72,7 @@ export default function UserSelect({ users, inputName, setState }: UserSelect) {
         value={select}
         onChange={handleChange}
       >
-        {users.map((user) => {
+        {state.users.map((user) => {
           return (
             <MenuItem
               key={`User-${user.id}`}

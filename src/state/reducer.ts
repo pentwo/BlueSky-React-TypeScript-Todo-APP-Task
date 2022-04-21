@@ -2,7 +2,7 @@
 import { Dispatch, Reducer, ReducerAction, ReducerState } from "react";
 import { AsyncActionHandlers } from "use-reducer-async";
 
-import { addTodo, getTodos, deleteTodo } from "../Util/Todo";
+import { addTodo, getTodos, deleteTodo, editTodo } from "../Util/Todo";
 import { getUsers } from "../Util/User";
 import { ActionTypes, StateActions } from "./actions";
 import { GlobalState } from "./state";
@@ -22,9 +22,9 @@ export function stateReducer(
       return { ...state, todos: [action.payload, ...state.todos] };
 
     case ActionTypes.EditTodo:
-      const todo = action.payload;
-
-      return { ...state };
+      console.log("ActionTypes.EditTodo: payload", action.payload);
+      const editTodo = action.payload;
+      return { ...state, TempTodo: { ...action.payload } };
 
     default:
       return { ...state };
@@ -35,11 +35,28 @@ export const asyncActionHandlers = {
   ADD_AND_REFRESH_TODO:
     ({ dispatch }) =>
     async (action) => {
-      console.log("ADD_AND_REFRESH_TODO-PAYLOAD", action.payload);
       const result = await addTodo(action.payload);
 
       dispatch({ type: "REFRESH_TODO" });
     },
+  GET_EDIT_AND_REFRESH_TODO:
+    ({ dispatch }) =>
+    async (action) => {
+      const todo = await editTodo(action.payload.id);
+      console.log("GET_EDIT_AND_REFRESH_TODO:", todo);
+      dispatch({ type: ActionTypes.EditTodo, payload: todo });
+
+      dispatch({ type: "REFRESH_TODO" });
+    },
+
+  DELETE_AND_REFRESH_TODO:
+    ({ dispatch }) =>
+    async (action) => {
+      const result = await deleteTodo(action.payload.id);
+
+      dispatch({ type: "REFRESH_TODO" });
+    },
+
   REFRESH_TODO:
     ({ dispatch }) =>
     async (action) => {
@@ -53,12 +70,5 @@ export const asyncActionHandlers = {
       const result = await getUsers();
 
       dispatch({ type: ActionTypes.RefreshUserList, payload: result });
-    },
-  DELETE_AND_REFRESH_TODO:
-    ({ dispatch }) =>
-    async (action) => {
-      const result = await deleteTodo(action.payload.id);
-
-      dispatch({ type: "REFRESH_TODO" });
     },
 };

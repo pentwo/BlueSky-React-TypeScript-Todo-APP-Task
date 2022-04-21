@@ -1,3 +1,5 @@
+// import { Todo, User, EditTodo } from "../types";
+
 export interface Todo {
   id: string;
   name: string;
@@ -9,13 +11,32 @@ export interface User {
   firstName: string;
   lastName: string;
 }
+// export interface NewTodo {
+//   name: string;
+//   user: string;
+//   isComplete: boolean;
+// }
+
+export interface TempTodo {
+  id: string;
+  name: string;
+  userId: string;
+  isComplete: boolean;
+}
 
 export type GlobalState = {
   todos: Todo[];
   users: User[];
+  TempTodo: undefined | TempTodo;
 };
 
 export const initialState: GlobalState = {
   todos: [],
   users: [],
+  TempTodo: {
+    id: "",
+    name: "",
+    userId: "",
+    isComplete: false,
+  },
 };
