@@ -94,7 +94,9 @@ export function makeServer() {
       });
       this.post("/todo/create", (schema: any, request) => {
         let attrs = JSON.parse(request.requestBody);
-        return schema.todos.create(attrs);
+        const user = schema.users.find(attrs.user);
+
+        return schema.todos.create({ ...attrs, user });
       });
     },
   });
