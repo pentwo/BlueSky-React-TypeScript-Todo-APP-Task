@@ -27,13 +27,13 @@ export interface TempTodo {
 export type GlobalState = {
   todos: Todo[];
   users: User[];
-  TempTodo: undefined | TempTodo;
+  tempTodo: undefined | TempTodo;
 };
 
 export const initialState: GlobalState = {
   todos: [],
   users: [],
-  TempTodo: {
+  tempTodo: {
     id: "",
     name: "",
     userId: "",

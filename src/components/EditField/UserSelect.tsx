@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface UserSelect {
   inputName: string;
   // editTodo: EditTodo;
-  setState: Dispatch<
+  setState?: Dispatch<
     SetStateAction<{ name: string; user: string; isComplete: boolean }>
   >;
 }
@@ -38,10 +38,10 @@ export default function UserSelect({ inputName, setState }: UserSelect) {
   const { state, dispatch } = globalContext;
 
   useEffect(() => {
-    if (state.TempTodo) {
-      setSelect(state.TempTodo.userId);
+    if (state.tempTodo) {
+      setSelect(state.tempTodo.userId);
     }
-  }, [state.TempTodo, select]);
+  }, [state.tempTodo, select]);
 
   if (!globalContext) return null;
 
@@ -52,13 +52,16 @@ export default function UserSelect({ inputName, setState }: UserSelect) {
 
     setSelect(value);
 
-    setState((pre) => {
-      return { ...pre, user: value };
-    });
-    if (state.TempTodo) {
+    if (setState) {
+      setState((pre) => {
+        return { ...pre, user: value };
+      });
+    }
+
+    if (state.tempTodo) {
       dispatch({
         type: ActionTypes.EditTodo,
-        payload: { ...state.TempTodo, userId: value },
+        payload: { ...state.tempTodo, userId: value },
       });
     }
   }

@@ -7,7 +7,7 @@ export enum ActionTypes {
   AddTodo,
   EditTodo,
   DeleteAndRefreshTodo,
-  // DeleteTodo,
+  ClearTempTodo,
   Update,
   Clear,
 }
@@ -35,8 +35,10 @@ export interface AddTodo {
 }
 export interface EditTodo {
   type: ActionTypes.EditTodo;
-  // payload: { userId: string };
   payload: TempTodo;
+}
+export interface ClearTempTodo {
+  type: ActionTypes.ClearTempTodo;
 }
 
 export interface AddAndRefreshTodo {
@@ -71,7 +73,9 @@ export type StateActions =
   | EditTodo
   | AddAndRefreshTodo
   | EditAndRefreshTodo
+  | SaveEditAndRefreshTodo
   | DeleteAndRefreshTodo
+  | ClearTempTodo
   | RefreshTodo
   | RefreshUser;
 

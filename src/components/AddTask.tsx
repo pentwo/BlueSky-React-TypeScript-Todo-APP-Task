@@ -5,10 +5,10 @@ import SaveIcon from "@material-ui/icons/Save";
 import React, { Ref, useEffect, useState } from "react";
 
 import { useGlobalContext } from "../state/context";
-import ProjectInputField from "./SearchField/ProjectInputField";
-import UserSelect from "./SearchField/UserSelect";
-import Switch from "./SearchField/Switch";
-import { ADD_AND_REFRESH_TODO } from "../state/actions";
+import ProjectInputField from "./EditField/ProjectInputField";
+import UserSelect from "./EditField/UserSelect";
+import Switch from "./EditField/Switch";
+import { ActionTypes, ADD_AND_REFRESH_TODO } from "../state/actions";
 import { TempTodo } from "../state/state";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,60 +28,46 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface AddTask {
-  label?: string;
   handleModalClose: () => void;
   payload?: TempTodo;
 }
 
-export default function AddTask({
-  label = "Add Task",
-  handleModalClose,
-  payload,
-}: AddTask) {
+export default function AddTask({ handleModalClose, payload }: AddTask) {
   const classes = useStyles();
+  const globalContext = useGlobalContext();
+  const { state, dispatch } = globalContext;
+
   const [newTodo, setNewTodo] = useState({
     name: "",
     user: "",
     isComplete: false,
   });
-  useEffect(() => {
-    // if (payload) {
-    //   const { name, userId, isComplete } = payload;
-    //   setNewTodo({ name, user, isComplete });
-    //   console.log("payload: ", payload);
-    // }
-  }, []);
-
-  const globalContext = useGlobalContext();
-  if (!globalContext) return null;
-
-  const { state, dispatch } = globalContext;
-  const { todos, users } = state;
 
   function handleSave() {
     dispatch({ type: ADD_AND_REFRESH_TODO, payload: newTodo });
+    dispatch({ type: ActionTypes.ClearTempTodo });
     handleModalClose();
   }
 
+  if (!globalContext) return null;
   return (
-    <div>
-      <Box className={classes.paper} display="flex" flexDirection="column">
-        <h2>{label}</h2>
-        <ProjectInputField
-          label="Project Name"
-          setState={setNewTodo}
-          inputName="newTodoInput"
-        />
-        <UserSelect setState={setNewTodo} inputName="newTodoSelect" />
-        <Switch checked={false} setState={setNewTodo} />
-        <Button
-          variant="contained"
-          onClick={handleSave}
-          startIcon={<SaveIcon />}
-        >
-          Save
-        </Button>
-      </Box>
-    </div>
+    <Box className={classes.paper} display="flex" flexDirection="column">
+      <h2>Add Task</h2>
+      <ProjectInputField
+        label="Project Name"
+        setState={setNewTodo}
+        inputName="newTodoInput"
+      />
+      <UserSelect setState={setNewTodo} inputName="newTodoSelect" />
+      <Switch checked={false} setState={setNewTodo} />
+      <Button
+        disabled={newTodo.name === "" || newTodo.user === ""}
+        variant="contained"
+        onClick={handleSave}
+        startIcon={<SaveIcon />}
+      >
+        Save
+      </Button>
+    </Box>
   );
 }

@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 interface SwitchProp {
   checked: boolean;
-  setState: Dispatch<
+  setState?: Dispatch<
     SetStateAction<{ name: string; user: string; isComplete: boolean }>
   >;
 }
@@ -46,22 +46,24 @@ export default function Switches({ checked, setState }: SwitchProp) {
   }, [checked]);
 
   useEffect(() => {
-    if (state.TempTodo) {
-      setCheckState(state.TempTodo.isComplete);
+    if (state.tempTodo) {
+      setCheckState(state.tempTodo.isComplete);
     }
-  }, [state.TempTodo]);
+  }, [state.tempTodo]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCheckState(!checkState);
 
-    setState((pre) => {
-      return { ...pre, isComplete: !checkState };
-    });
+    if (setState) {
+      setState((pre) => {
+        return { ...pre, isComplete: !checkState };
+      });
+    }
 
-    if (state.TempTodo) {
+    if (state.tempTodo) {
       dispatch({
         type: ActionTypes.EditTodo,
-        payload: { ...state.TempTodo, isComplete: !checkState },
+        payload: { ...state.tempTodo, isComplete: !checkState },
       });
     }
   };

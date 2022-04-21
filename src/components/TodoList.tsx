@@ -21,9 +21,11 @@ import { useGlobalContext } from "../state/context";
 import {
   GET_EDIT_AND_REFRESH_TODO,
   DELETE_AND_REFRESH_TODO,
+  ActionTypes,
 } from "../state/actions";
 import { editTodo } from "../Util/Todo";
 import AddTask from "./AddTask";
+import EditField from "./EditField";
 
 const useStyles = makeStyles({
   table: {
@@ -39,12 +41,12 @@ interface Payload {
 }
 
 export default function TodoList() {
-  const [open, setOpen] = useState(false);
   const [payload, setPayload] = useState<Payload>({
     name: "",
     user: "",
     isComplete: false,
   });
+  const [open, setOpen] = useState(false);
 
   const classes = useStyles();
   const globalContext = useGlobalContext();
@@ -53,17 +55,13 @@ export default function TodoList() {
   const { state, dispatch } = globalContext;
   const { todos, users } = state;
 
-  const handleModalOpen = () => {
-    setOpen(true);
-  };
-
   const handleModalClose = () => {
     setOpen(false);
+    dispatch({ type: ActionTypes.ClearTempTodo });
   };
 
   function handleFilter(e: React.MouseEvent) {
     const target = e.currentTarget.childNodes[0].nodeValue;
-    // console.log("e.currentTarget: ", e.currentTarget);
     if (!target) return;
   }
 
@@ -72,13 +70,16 @@ export default function TodoList() {
       .getAttribute("data-edit")
       ?.split("-")[1] as string;
 
+    setOpen(true);
     dispatch({ type: GET_EDIT_AND_REFRESH_TODO, payload: { id: id } });
   }
 
   function handleDelete(e: React.MouseEvent) {
-    const id = e.currentTarget.getAttribute("data-delete")?.split("-")[1];
-    if (id) {
-      dispatch({ type: DELETE_AND_REFRESH_TODO, payload: { id: id } });
+    if (window.confirm("Are you sure you want to delete?")) {
+      const id = e.currentTarget.getAttribute("data-delete")?.split("-")[1];
+      if (id) {
+        dispatch({ type: DELETE_AND_REFRESH_TODO, payload: { id: id } });
+      }
     }
   }
 
@@ -87,13 +88,9 @@ export default function TodoList() {
       <Table aria-label="todo table">
         <TableHead>
           <TableRow>
-            <TableCell onClick={handleFilter}>Project Name</TableCell>
-            <TableCell align="center" onClick={handleFilter}>
-              User
-            </TableCell>
-            <TableCell align="center" onClick={handleFilter}>
-              Completed
-            </TableCell>
+            <TableCell>Project Name</TableCell>
+            <TableCell align="center">User</TableCell>
+            <TableCell align="center">Completed</TableCell>
             <TableCell align="center">Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -138,14 +135,8 @@ export default function TodoList() {
         </TableBody>
       </Table>
       <Modal open={open} onClose={handleModalClose}>
-        <AddTask handleModalClose={handleModalClose} />
+        <EditField handleModalClose={handleModalClose} />
       </Modal>
     </TableContainer>
   );
 }
-
-function useEffects(arg0: () => void, arg1: Payload[]) {
-  throw new Error("Function not implemented.");
-}
-// CheckCircleOutlineOutlinedIcon
-// RadioButtonUncheckedOutlinedIcon

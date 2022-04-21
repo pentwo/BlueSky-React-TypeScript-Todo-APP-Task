@@ -4,7 +4,7 @@ import { Box, Button, Container, Modal } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 import "./App.css";
-import SearchField from "./components/SearchField";
+import EditField from "./components/EditField";
 import TodoList from "./components/TodoList";
 import AddTask from "./components/AddTask";
 
@@ -12,7 +12,7 @@ import AddTask from "./components/AddTask";
 import { initialState } from "./state/state";
 import { stateReducer, asyncActionHandlers } from "./state/reducer";
 import { GlobalContext } from "./state/context";
-import { REFRESH_TODO, REFRESH_USER } from "./state/actions";
+import { ActionTypes, REFRESH_TODO, REFRESH_USER } from "./state/actions";
 
 function App() {
   const [state, dispatch] = useReducerAsync(
@@ -20,7 +20,7 @@ function App() {
     initialState,
     asyncActionHandlers
   );
-  const [open, setOpen] = useState(false);
+  const [addTaskModalState, setAddTaskModalState] = useState(false);
   const [search, setSearch] = useState({
     name: "",
     user: "",
@@ -28,11 +28,12 @@ function App() {
   });
 
   const handleModalOpen = () => {
-    setOpen(true);
+    setAddTaskModalState(true);
   };
 
   const handleModalClose = () => {
-    setOpen(false);
+    setAddTaskModalState(false);
+    dispatch({ type: ActionTypes.ClearTempTodo });
   };
 
   useEffect(() => {
@@ -44,7 +45,7 @@ function App() {
     <GlobalContext.Provider value={{ state, dispatch }}>
       <div className="App">
         <Container maxWidth="md">
-          <SearchField setSearch={setSearch} />
+          {/* <EditField setSearch={setSearch} /> */}
           <TodoList />
           <Box display="flex" flexDirection="row-reverse">
             <Button
@@ -56,9 +57,11 @@ function App() {
             </Button>
           </Box>
         </Container>
-        <Modal open={open} onClose={handleModalClose}>
+        {/* Add Task */}
+        <Modal open={addTaskModalState} onClose={handleModalClose}>
           <AddTask handleModalClose={handleModalClose} />
         </Modal>
+        {/* Edit Task */}
       </div>
     </GlobalContext.Provider>
   );

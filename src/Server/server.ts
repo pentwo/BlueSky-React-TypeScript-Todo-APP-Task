@@ -76,6 +76,7 @@ export function makeServer() {
       });
 
       // todo apis
+
       this.get("/todos", (schema: any, request) => {
         const active = request.params.active;
         return schema.todos.all();
@@ -92,6 +93,17 @@ export function makeServer() {
         schema.todos.find(todoId).destroy();
         return { success: true };
       });
+
+      this.patch("/todo/:id/edit", (schema: any, request) => {
+        const todoId = request.params.id;
+        let attrs = JSON.parse(request.requestBody);
+        const todo = schema.todos.find(todoId).update(attrs);
+
+        return {
+          todo: todo,
+        };
+      });
+
       this.post("/todo/create", (schema: any, request) => {
         let attrs = JSON.parse(request.requestBody);
         const user = schema.users.find(attrs.user);

@@ -21,7 +21,7 @@ interface ProjectInputField {
   label: string;
   editTodo?: TempTodo;
   inputName: string;
-  setState: Dispatch<
+  setState?: Dispatch<
     SetStateAction<{ name: string; user: string; isComplete: boolean }>
   >;
 }
@@ -39,24 +39,26 @@ export default function ProjectInputField({
   const { state, dispatch } = globalContext;
 
   useEffect(() => {
-    if (state.TempTodo) {
-      setValue(state.TempTodo.name);
+    if (state.tempTodo) {
+      setValue(state.tempTodo.name);
     }
-  }, [state.TempTodo]);
+  }, [state.tempTodo]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;
 
     setValue(value);
 
-    setState((pre) => {
-      return { ...pre, name: value };
-    });
+    if (setState) {
+      setState((pre) => {
+        return { ...pre, name: value };
+      });
+    }
 
-    if (state.TempTodo) {
+    if (state.tempTodo) {
       dispatch({
         type: ActionTypes.EditTodo,
-        payload: { ...state.TempTodo, name: value },
+        payload: { ...state.tempTodo, name: value },
       });
     }
   }
