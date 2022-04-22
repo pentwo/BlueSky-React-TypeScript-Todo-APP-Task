@@ -95,38 +95,41 @@ export default function TodoList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {todos.length > 0 ? (
+          {state.search.name ? (
+            todos
+              .filter((todo) => {
+                const { name } = state.search;
+                const regex = new RegExp(name, "gi");
+                return todo.name.search(regex) !== -1;
+              })
+              .map((todo) => {
+                const userQuery: User = Object.values(users).filter((user) => {
+                  return user.id === todo.user;
+                })[0];
+
+                return (
+                  <TodoRow
+                    key={todo.id}
+                    todo={todo}
+                    userQuery={userQuery}
+                    handleDelete={handleDelete}
+                    handleEdit={handleEdit}
+                  />
+                );
+              })
+          ) : todos.length > 0 ? (
             todos.map((todo) => {
-              const filterResult: User = Object.values(users).filter((user) => {
+              const userQuery: User = Object.values(users).filter((user) => {
                 return user.id === todo.user;
               })[0];
-
               return (
-                <TableRow hover key={todo.id}>
-                  <TableCell scope="row">{todo.name}</TableCell>
-                  <TableCell align="center">
-                    {`${filterResult?.firstName} ${filterResult?.lastName}`}
-                  </TableCell>
-                  <TableCell align="center">
-                    {todo.isComplete ? (
-                      <CheckCircleOutlineOutlinedIcon color="primary" />
-                    ) : (
-                      <RadioButtonUncheckedOutlinedIcon color="primary" />
-                    )}
-                  </TableCell>
-                  <TableCell align="center">
-                    <CancelIcon
-                      data-delete={`Delete-${todo.id}`}
-                      color="primary"
-                      onClick={handleDelete}
-                    />
-                    <EditIcon
-                      data-edit={`Edit-${todo.id}`}
-                      color="primary"
-                      onClick={handleEdit}
-                    />
-                  </TableCell>
-                </TableRow>
+                <TodoRow
+                  key={todo.id}
+                  todo={todo}
+                  userQuery={userQuery}
+                  handleDelete={handleDelete}
+                  handleEdit={handleEdit}
+                />
               );
             })
           ) : (
@@ -138,5 +141,42 @@ export default function TodoList() {
         <EditField handleModalClose={handleModalClose} />
       </Modal>
     </TableContainer>
+  );
+}
+
+interface TodoRow {
+  todo: Todo;
+  userQuery: User;
+  handleDelete: (e: React.MouseEvent) => void;
+  handleEdit: (e: React.MouseEvent) => void;
+}
+
+function TodoRow({ todo, userQuery, handleDelete, handleEdit }: TodoRow) {
+  return (
+    <TableRow hover>
+      <TableCell scope="row">{todo.name}</TableCell>
+      <TableCell align="center">
+        {`${userQuery?.firstName} ${userQuery?.lastName}`}
+      </TableCell>
+      <TableCell align="center">
+        {todo.isComplete ? (
+          <CheckCircleOutlineOutlinedIcon color="primary" />
+        ) : (
+          <RadioButtonUncheckedOutlinedIcon color="primary" />
+        )}
+      </TableCell>
+      <TableCell align="center">
+        <CancelIcon
+          data-delete={`Delete-${todo.id}`}
+          color="primary"
+          onClick={handleDelete}
+        />
+        <EditIcon
+          data-edit={`Edit-${todo.id}`}
+          color="primary"
+          onClick={handleEdit}
+        />
+      </TableCell>
+    </TableRow>
   );
 }

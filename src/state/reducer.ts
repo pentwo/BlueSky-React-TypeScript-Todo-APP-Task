@@ -27,7 +27,6 @@ export function stateReducer(
       return { ...state, todos: [action.payload, ...state.todos] };
 
     case ActionTypes.EditTodo:
-      const editTodo = action.payload;
       return { ...state, tempTodo: { ...action.payload } };
 
     case ActionTypes.ClearTempTodo:
@@ -40,6 +39,9 @@ export function stateReducer(
           isComplete: false,
         },
       };
+
+    case ActionTypes.Search:
+      return { ...state, search: { ...action.payload } };
 
     default:
       return { ...state };

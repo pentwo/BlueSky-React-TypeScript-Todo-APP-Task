@@ -24,9 +24,15 @@ export interface TempTodo {
   isComplete: boolean;
 }
 
+export interface SearchTodo {
+  name: string;
+  userId: string;
+}
+
 export type GlobalState = {
   todos: Todo[];
   users: User[];
+  search: SearchTodo;
   tempTodo: undefined | TempTodo;
 };
 
@@ -38,5 +44,9 @@ export const initialState: GlobalState = {
     name: "",
     userId: "",
     isComplete: false,
+  },
+  search: {
+    name: "",
+    userId: "",
   },
 };

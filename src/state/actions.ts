@@ -1,4 +1,4 @@
-import { Todo, User, TempTodo } from "./state";
+import { Todo, User, TempTodo, SearchTodo } from "./state";
 
 // normal reducer actions
 export enum ActionTypes {
@@ -8,6 +8,7 @@ export enum ActionTypes {
   EditTodo,
   DeleteAndRefreshTodo,
   ClearTempTodo,
+  Search,
   Update,
   Clear,
 }
@@ -37,6 +38,11 @@ export interface EditTodo {
   type: ActionTypes.EditTodo;
   payload: TempTodo;
 }
+export interface Search {
+  type: ActionTypes.Search;
+  payload: SearchTodo;
+}
+
 export interface ClearTempTodo {
   type: ActionTypes.ClearTempTodo;
 }
@@ -76,6 +82,7 @@ export type StateActions =
   | SaveEditAndRefreshTodo
   | DeleteAndRefreshTodo
   | ClearTempTodo
+  | Search
   | RefreshTodo
   | RefreshUser;
 

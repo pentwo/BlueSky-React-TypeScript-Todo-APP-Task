@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   createStyles,
-  Grid,
   makeStyles,
   Theme,
 } from "@material-ui/core";
@@ -63,9 +62,9 @@ export default function EditField({ handleModalClose, setSearch }: EditField) {
       <ProjectInputField
         editTodo={state.tempTodo}
         label="Project Name"
-        inputName="searchInput"
+        inputName="editInput"
       />
-      <UserSelect inputName="searchSelect" />
+      <UserSelect inputName="editSelect" />
       <Switch checked={false} setState={setSearch} />
       <Button
         variant="contained"
@@ -75,35 +74,5 @@ export default function EditField({ handleModalClose, setSearch }: EditField) {
         Save Edit
       </Button>
     </Box>
-    // <Grid
-    //   container
-    //   justifyContent="space-between"
-    //   alignItems="center"
-    //   spacing={2}
-    //   style={{ marginTop: 24 }}
-    // >
-    //   <Grid item>
-    // <ProjectInputField
-    //   editTodo={state.tempTodo}
-    //   label="Project Name"
-    //   inputName="searchInput"
-    // />
-    //   </Grid>
-    //   <Grid item>
-    //     <UserSelect inputName="searchSelect" />
-    //   </Grid>
-    //   <Grid item>
-    //     <Switch checked={false} setState={setSearch} />
-    //   </Grid>
-    //   <Grid item>
-    //     <Button
-    //       variant="contained"
-    //       onClick={handleSaveEdit}
-    //       startIcon={<SaveIcon />}
-    //     >
-    //       Save Edit
-    //     </Button>
-    //   </Grid>
-    // </Grid>
   );
 }

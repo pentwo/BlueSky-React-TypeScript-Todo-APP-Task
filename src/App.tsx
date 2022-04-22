@@ -4,7 +4,7 @@ import { Box, Button, Container, Modal } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 import "./App.css";
-import EditField from "./components/EditField";
+import SearchFields from "./components/SearchFields";
 import TodoList from "./components/TodoList";
 import AddTask from "./components/AddTask";
 
@@ -45,7 +45,7 @@ function App() {
     <GlobalContext.Provider value={{ state, dispatch }}>
       <div className="App">
         <Container maxWidth="md">
-          {/* <EditField setSearch={setSearch} /> */}
+          <SearchFields />
           <TodoList />
           <Box display="flex" flexDirection="row-reverse">
             <Button
