@@ -13,6 +13,11 @@ export async function getTodos() {
   }
 }
 
+/**
+ * Sent Todo to the server to save
+ * @param payload {NewTodo}
+ * @returns
+ */
 export async function addTodo(payload: NewTodo) {
   try {
     const result = await axios
@@ -28,11 +33,11 @@ export async function addTodo(payload: NewTodo) {
 }
 
 /**
- * Get
+ * Get Todo from server by ID
  * @param id {Number|String} Todo id
  * @returns
  */
-export async function editTodo(id: string | number) {
+export async function getTodo(id: string | number) {
   try {
     const { todo } = await axios
       .get(`api/todo/${id}`)

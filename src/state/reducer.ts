@@ -2,13 +2,7 @@ import { Reducer } from "react";
 
 import { AsyncActionHandlers } from "use-reducer-async";
 
-import {
-  addTodo,
-  getTodos,
-  deleteTodo,
-  editTodo,
-  saveTodo,
-} from "../Util/Todo";
+import { addTodo, getTodos, deleteTodo, getTodo, saveTodo } from "../Util/Todo";
 import { getUsers } from "../Util/User";
 import { ActionTypes, AsyncActions, StateActions } from "./actions";
 import { GlobalState } from "./state";
@@ -65,7 +59,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
   GET_EDIT_AND_REFRESH_TODO:
     ({ dispatch }) =>
     async (action) => {
-      const todo = await editTodo(action.payload.id);
+      const todo = await getTodo(action.payload.id);
       dispatch({ type: ActionTypes.EditTodo, payload: todo });
 
       dispatch({ type: "REFRESH_TODO" });
