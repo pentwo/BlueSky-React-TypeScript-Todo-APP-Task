@@ -5,13 +5,12 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-
-import Switch from "@material-ui/core/Switch";
-
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
-import { Box, FormControlLabel } from "@material-ui/core";
+import { Box } from "@material-ui/core";
+import Switch from "@material-ui/core/Switch";
 import CheckCircleOutlineOutlinedIcon from "@material-ui/icons/CheckCircleOutlineOutlined";
 import RadioButtonUncheckedOutlinedIcon from "@material-ui/icons/RadioButtonUncheckedOutlined";
+
 import { useGlobalContext } from "../../state/context";
 import { ActionTypes } from "../../state/actions";
 

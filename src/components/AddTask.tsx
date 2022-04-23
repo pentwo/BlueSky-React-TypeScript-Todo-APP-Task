@@ -2,7 +2,7 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
-import React, { Ref, useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { useGlobalContext } from "../state/context";
 import ProjectInputField from "./EditField/ProjectInputField";
@@ -35,7 +35,7 @@ interface AddTask {
 export default function AddTask({ handleModalClose, payload }: AddTask) {
   const classes = useStyles();
   const globalContext = useGlobalContext();
-  const { state, dispatch } = globalContext;
+  const { dispatch } = globalContext;
 
   const [newTodo, setNewTodo] = useState({
     name: "",

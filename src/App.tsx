@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useReducerAsync } from "use-reducer-async";
 import { Box, Button, Container, Modal } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
@@ -21,11 +21,6 @@ function App() {
     asyncActionHandlers
   );
   const [addTaskModalState, setAddTaskModalState] = useState(false);
-  const [search, setSearch] = useState({
-    name: "",
-    user: "",
-    isComplete: false,
-  });
 
   const handleModalOpen = () => {
     setAddTaskModalState(true);
@@ -39,7 +34,7 @@ function App() {
   useEffect(() => {
     dispatch({ type: REFRESH_TODO });
     dispatch({ type: REFRESH_USER });
-  }, []);
+  }, [dispatch]);
 
   return (
     <GlobalContext.Provider value={{ state, dispatch }}>
