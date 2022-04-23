@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Todo, TempTodo } from "../state/state";
+import { TempTodo, NewTodo } from "../state/state";
 
 export async function getTodos() {
   try {
@@ -13,7 +13,7 @@ export async function getTodos() {
   }
 }
 
-export async function addTodo(payload: Todo) {
+export async function addTodo(payload: NewTodo) {
   try {
     const result = await axios
       .post(`api/todo/create`, {
@@ -27,13 +27,17 @@ export async function addTodo(payload: Todo) {
   }
 }
 
-export async function editTodo(id: string) {
+/**
+ * Get
+ * @param id {Number|String} Todo id
+ * @returns
+ */
+export async function editTodo(id: string | number) {
   try {
     const { todo } = await axios
       .get(`api/todo/${id}`)
       .then((response) => response.data);
 
-    console.log("todo: ", todo);
     return todo;
   } catch (error) {
     console.error(error);
@@ -48,14 +52,13 @@ export async function saveTodo(payload: TempTodo) {
       })
       .then((response) => response.data);
 
-    console.log("todo: ", todo);
     return todo;
   } catch (error) {
     console.error(error);
   }
 }
 
-export async function deleteTodo(id: number) {
+export async function deleteTodo(id: string | number) {
   try {
     const result = await axios
       .delete(`api/todo/${id}/delete`)

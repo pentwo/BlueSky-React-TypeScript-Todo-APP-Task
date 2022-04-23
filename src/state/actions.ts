@@ -1,4 +1,4 @@
-import { Todo, User, TempTodo, SearchTodo } from "./state";
+import { Todo, User, TempTodo, SearchTodo, NewTodo } from "./state";
 
 // normal reducer actions
 export enum ActionTypes {
@@ -49,7 +49,8 @@ export interface ClearTempTodo {
 
 export interface AddAndRefreshTodo {
   type: "ADD_AND_REFRESH_TODO";
-  payload: { name: string; user: string; isComplete: boolean };
+  // payload: { name: string; user: string; isComplete: boolean };
+  payload: NewTodo;
 }
 export interface EditAndRefreshTodo {
   type: "GET_EDIT_AND_REFRESH_TODO";
@@ -72,18 +73,26 @@ export interface RefreshUser {
   type: "REFRESH_USER";
 }
 
+export type AsyncActions =
+  | AddAndRefreshTodo
+  | EditAndRefreshTodo
+  | SaveEditAndRefreshTodo
+  | DeleteAndRefreshTodo
+  | RefreshTodo
+  | RefreshUser;
+
 export type StateActions =
   | RefreshTodoList
   | RefreshUserList
   | AddTodo
   | EditTodo
+  | Search
+  | ClearTempTodo
   | AddAndRefreshTodo
   | EditAndRefreshTodo
   | SaveEditAndRefreshTodo
   | DeleteAndRefreshTodo
-  | ClearTempTodo
-  | Search
   | RefreshTodo
   | RefreshUser;
 
-export type Actions = StateActions;
+export type Actions = StateActions | AsyncActions;

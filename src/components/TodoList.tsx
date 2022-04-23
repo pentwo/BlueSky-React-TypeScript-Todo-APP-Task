@@ -23,8 +23,6 @@ import {
   DELETE_AND_REFRESH_TODO,
   ActionTypes,
 } from "../state/actions";
-import { editTodo } from "../Util/Todo";
-import AddTask from "./AddTask";
 import EditField from "./EditField";
 
 const useStyles = makeStyles({
@@ -41,16 +39,10 @@ interface Payload {
 }
 
 export default function TodoList() {
-  const [payload, setPayload] = useState<Payload>({
-    name: "",
-    user: "",
-    isComplete: false,
-  });
   const [open, setOpen] = useState(false);
 
   const classes = useStyles();
   const globalContext = useGlobalContext();
-  if (!globalContext) return null;
 
   const { state, dispatch } = globalContext;
   const { todos, users } = state;
@@ -59,11 +51,6 @@ export default function TodoList() {
     setOpen(false);
     dispatch({ type: ActionTypes.ClearTempTodo });
   };
-
-  function handleFilter(e: React.MouseEvent) {
-    const target = e.currentTarget.childNodes[0].nodeValue;
-    if (!target) return;
-  }
 
   function handleEdit(e: React.MouseEvent) {
     const id = e.currentTarget
@@ -83,6 +70,9 @@ export default function TodoList() {
     }
   }
 
+  // useEffect(() => {}, [state.search]);
+
+  if (!globalContext) return null;
   return (
     <TableContainer className={classes.table} component={Paper}>
       <Table aria-label="todo table">
@@ -95,12 +85,19 @@ export default function TodoList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {state.search.name ? (
+          {state.search.name || state.search.userId ? (
             todos
               .filter((todo) => {
-                const { name } = state.search;
+                const { name, userId } = state.search;
+
                 const regex = new RegExp(name, "gi");
-                return todo.name.search(regex) !== -1;
+                const nameMatch = todo.name.search(regex) !== -1;
+                let userMatch = true;
+                if (userId) {
+                  userMatch = todo.user === userId;
+                }
+
+                return nameMatch && userMatch;
               })
               .map((todo) => {
                 const userQuery: User = Object.values(users).filter((user) => {

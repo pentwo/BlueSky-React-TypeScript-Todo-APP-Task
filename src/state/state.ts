@@ -11,11 +11,12 @@ export interface User {
   firstName: string;
   lastName: string;
 }
-// export interface NewTodo {
-//   name: string;
-//   user: string;
-//   isComplete: boolean;
-// }
+
+export interface NewTodo {
+  name: string;
+  user: string;
+  isComplete: boolean;
+}
 
 export interface TempTodo {
   id: string;
@@ -26,7 +27,8 @@ export interface TempTodo {
 
 export interface SearchTodo {
   name: string;
-  userId: string;
+  userId: string | number;
+  isComplete: boolean;
 }
 
 export type GlobalState = {
@@ -48,5 +50,6 @@ export const initialState: GlobalState = {
   search: {
     name: "",
     userId: "",
+    isComplete: false,
   },
 };

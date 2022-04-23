@@ -1,5 +1,5 @@
-// @ts-nocheck
-import { Dispatch, Reducer, ReducerAction, ReducerState } from "react";
+import { Reducer } from "react";
+
 import { AsyncActionHandlers } from "use-reducer-async";
 
 import {
@@ -10,7 +10,7 @@ import {
   saveTodo,
 } from "../Util/Todo";
 import { getUsers } from "../Util/User";
-import { ActionTypes, StateActions } from "./actions";
+import { ActionTypes, AsyncActions, StateActions } from "./actions";
 import { GlobalState } from "./state";
 
 export function stateReducer(
@@ -48,11 +48,17 @@ export function stateReducer(
   }
 }
 
-export const asyncActionHandlers = {
+export const asyncActionHandlers: AsyncActionHandlers<
+  Reducer<GlobalState, StateActions>,
+  AsyncActions
+> = {
   ADD_AND_REFRESH_TODO:
     ({ dispatch }) =>
     async (action) => {
       const result = await addTodo(action.payload);
+      if (result?.status !== 200) {
+        console.error(result?.statusText);
+      }
 
       dispatch({ type: "REFRESH_TODO" });
     },
@@ -60,7 +66,6 @@ export const asyncActionHandlers = {
     ({ dispatch }) =>
     async (action) => {
       const todo = await editTodo(action.payload.id);
-      console.log("GET_EDIT_AND_REFRESH_TODO:", todo);
       dispatch({ type: ActionTypes.EditTodo, payload: todo });
 
       dispatch({ type: "REFRESH_TODO" });
@@ -70,8 +75,7 @@ export const asyncActionHandlers = {
     ({ dispatch }) =>
     async (action) => {
       // Call async to save Todo to database
-      const todo = await saveTodo(action.payload);
-      console.log("SAVE_EDIT_TODO_AND_REFRESH_TODO", todo);
+      await saveTodo(action.payload);
 
       dispatch({ type: "REFRESH_TODO" });
     },
@@ -79,7 +83,11 @@ export const asyncActionHandlers = {
   DELETE_AND_REFRESH_TODO:
     ({ dispatch }) =>
     async (action) => {
-      const result = await deleteTodo(action.payload.id);
+      const id = action.payload.id as string;
+      const result = await deleteTodo(id);
+      if (result?.status !== 200) {
+        console.error(result?.statusText);
+      }
 
       dispatch({ type: "REFRESH_TODO" });
     },
