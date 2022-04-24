@@ -1,5 +1,9 @@
 import axios from "axios";
 
+/**
+ * Get all users from the database
+ * @returns user[]
+ */
 export async function getUsers() {
   try {
     const { users } = await axios

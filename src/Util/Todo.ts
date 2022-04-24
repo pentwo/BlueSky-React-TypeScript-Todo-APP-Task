@@ -1,6 +1,10 @@
 import axios from "axios";
 import { TempTodo, NewTodo } from "../state/state";
 
+/**
+ * Get all list of todos
+ * @returns Todo[]
+ */
 export async function getTodos() {
   try {
     const { todos } = await axios
@@ -8,6 +12,23 @@ export async function getTodos() {
       .then((response) => response.data);
 
     return todos;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * Get Todo from server by ID
+ * @param id {Number|String} Todo id
+ * @returns todo
+ */
+export async function getTodo(id: string | number) {
+  try {
+    const { todo } = await axios
+      .get(`api/todo/${id}`)
+      .then((response) => response.data);
+
+    return todo;
   } catch (error) {
     console.error(error);
   }
@@ -33,21 +54,10 @@ export async function addTodo(payload: NewTodo) {
 }
 
 /**
- * Get Todo from server by ID
- * @param id {Number|String} Todo id
- * @returns
+ * Save Todo to the database
+ * @param payload {TempTodo}
+ * @returns todo
  */
-export async function getTodo(id: string | number) {
-  try {
-    const { todo } = await axios
-      .get(`api/todo/${id}`)
-      .then((response) => response.data);
-
-    return todo;
-  } catch (error) {
-    console.error(error);
-  }
-}
 export async function saveTodo(payload: TempTodo) {
   try {
     const { id } = payload;
@@ -63,6 +73,11 @@ export async function saveTodo(payload: TempTodo) {
   }
 }
 
+/**
+ * Delete todo by id
+ * @param id
+ * @returns result: success | error
+ */
 export async function deleteTodo(id: string | number) {
   try {
     const result = await axios
