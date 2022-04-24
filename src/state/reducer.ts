@@ -1,10 +1,14 @@
 import { Reducer } from "react";
-
 import { AsyncActionHandlers } from "use-reducer-async";
 
 import { addTodo, getTodos, deleteTodo, getTodo, saveTodo } from "../Util/Todo";
 import { getUsers } from "../Util/User";
-import { ActionTypes, AsyncActions, StateActions } from "./actions";
+import {
+  ActionTypes,
+  AsyncActions,
+  REFRESH_TODO,
+  StateActions,
+} from "./actions";
 import { GlobalState } from "./state";
 
 export function stateReducer(
@@ -14,6 +18,7 @@ export function stateReducer(
   switch (action.type) {
     case ActionTypes.RefreshTodoList:
       return { ...state, todos: [...action.payload] };
+
     case ActionTypes.RefreshUserList:
       return { ...state, users: [...action.payload] };
 
@@ -54,15 +59,16 @@ export const asyncActionHandlers: AsyncActionHandlers<
         console.error(result?.statusText);
       }
 
-      dispatch({ type: "REFRESH_TODO" });
+      dispatch({ type: REFRESH_TODO });
     },
+
   GET_EDIT_AND_REFRESH_TODO:
     ({ dispatch }) =>
     async (action) => {
       const todo = await getTodo(action.payload.id);
       dispatch({ type: ActionTypes.EditTodo, payload: todo });
 
-      dispatch({ type: "REFRESH_TODO" });
+      dispatch({ type: REFRESH_TODO });
     },
 
   SAVE_EDIT_TODO_AND_REFRESH_TODO:
@@ -71,7 +77,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
       // Call async to save Todo to database
       await saveTodo(action.payload);
 
-      dispatch({ type: "REFRESH_TODO" });
+      dispatch({ type: REFRESH_TODO });
     },
 
   DELETE_AND_REFRESH_TODO:
@@ -83,7 +89,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
         console.error(result?.statusText);
       }
 
-      dispatch({ type: "REFRESH_TODO" });
+      dispatch({ type: REFRESH_TODO });
     },
 
   REFRESH_TODO:

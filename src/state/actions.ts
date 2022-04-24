@@ -13,13 +13,7 @@ export enum ActionTypes {
   Clear,
 }
 
-export const ADD_AND_REFRESH_TODO = "ADD_AND_REFRESH_TODO";
-export const DELETE_AND_REFRESH_TODO = "DELETE_AND_REFRESH_TODO";
-export const GET_EDIT_AND_REFRESH_TODO = "GET_EDIT_AND_REFRESH_TODO";
-export const SAVE_EDIT_TODO_AND_REFRESH_TODO =
-  "SAVE_EDIT_TODO_AND_REFRESH_TODO";
-export const REFRESH_TODO = "REFRESH_TODO";
-export const REFRESH_USER = "REFRESH_USER";
+// Actions for Normal reducer calls
 
 export interface RefreshTodoList {
   type: ActionTypes.RefreshTodoList;
@@ -47,9 +41,18 @@ export interface ClearTempTodo {
   type: ActionTypes.ClearTempTodo;
 }
 
+// Actions for Async reducer calls
+
+export const ADD_AND_REFRESH_TODO = "ADD_AND_REFRESH_TODO";
+export const DELETE_AND_REFRESH_TODO = "DELETE_AND_REFRESH_TODO";
+export const GET_EDIT_AND_REFRESH_TODO = "GET_EDIT_AND_REFRESH_TODO";
+export const SAVE_EDIT_TODO_AND_REFRESH_TODO =
+  "SAVE_EDIT_TODO_AND_REFRESH_TODO";
+export const REFRESH_TODO = "REFRESH_TODO";
+export const REFRESH_USER = "REFRESH_USER";
+
 export interface AddAndRefreshTodo {
   type: "ADD_AND_REFRESH_TODO";
-  // payload: { name: string; user: string; isComplete: boolean };
   payload: NewTodo;
 }
 export interface EditAndRefreshTodo {

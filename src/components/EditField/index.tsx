@@ -9,10 +9,14 @@ import {
 import SaveIcon from "@material-ui/icons/Save";
 
 import { useGlobalContext } from "../../state/context";
+import {
+  ActionTypes,
+  SAVE_EDIT_TODO_AND_REFRESH_TODO,
+} from "../../state/actions";
+
 import ProjectInputField from "./ProjectInputField";
 import UserSelect from "./UserSelect";
 import Switch from "./Switch";
-import { ActionTypes } from "../../state/actions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,16 +43,16 @@ interface EditField {
 
 export default function EditField({ handleModalClose, setSearch }: EditField) {
   const classes = useStyles();
-  const globalContext = useGlobalContext();
-  if (!globalContext) return null;
 
+  // Loading global context
+  const globalContext = useGlobalContext();
   const { state, dispatch } = globalContext;
   const { tempTodo } = state;
 
   function handleSaveEdit() {
     if (tempTodo) {
       dispatch({
-        type: "SAVE_EDIT_TODO_AND_REFRESH_TODO",
+        type: SAVE_EDIT_TODO_AND_REFRESH_TODO,
         payload: tempTodo,
       });
       dispatch({ type: ActionTypes.ClearTempTodo });
@@ -56,6 +60,7 @@ export default function EditField({ handleModalClose, setSearch }: EditField) {
     handleModalClose();
   }
 
+  if (!globalContext) return null;
   return (
     <Box className={classes.paper} display="flex" flexDirection="column">
       <h2>Edit Task</h2>

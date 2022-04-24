@@ -29,11 +29,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface AddTask {
   handleModalClose: () => void;
-  payload?: TempTodo;
 }
 
-export default function AddTask({ handleModalClose, payload }: AddTask) {
+export default function AddTask({ handleModalClose }: AddTask) {
   const classes = useStyles();
+
+  // Loading global context
   const globalContext = useGlobalContext();
   const { dispatch } = globalContext;
 
@@ -43,6 +44,7 @@ export default function AddTask({ handleModalClose, payload }: AddTask) {
     isComplete: false,
   });
 
+  // Dispatch Save actions and clear temporary Todo action
   function handleSave() {
     dispatch({ type: ADD_AND_REFRESH_TODO, payload: newTodo });
     dispatch({ type: ActionTypes.ClearTempTodo });

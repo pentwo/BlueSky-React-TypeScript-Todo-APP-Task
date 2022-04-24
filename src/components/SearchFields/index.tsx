@@ -1,3 +1,4 @@
+import React from "react";
 import {
   createStyles,
   FormControl,
@@ -11,7 +12,6 @@ import {
   TextField,
   Theme,
 } from "@material-ui/core";
-import React, { useState } from "react";
 import CheckCircleOutlineOutlinedIcon from "@material-ui/icons/CheckCircleOutlineOutlined";
 import RadioButtonUncheckedOutlinedIcon from "@material-ui/icons/RadioButtonUncheckedOutlined";
 
@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     Paper: {
       padding: theme.spacing(2),
+      marginBottom: theme.spacing(4),
     },
     Grid: {
       marginTop: 24,
@@ -44,17 +45,18 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function SearchFields() {
   const classes = useStyles();
 
+  // Loading global context
   const globalContext = useGlobalContext();
-
   const { state, dispatch } = globalContext;
   const { search } = state;
 
+  // Set input value to search state
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;
 
     dispatch({ type: ActionTypes.Search, payload: { ...search, name: value } });
   }
-
+  // Set select value to search state
   function handleSelectChange(
     e: React.ChangeEvent<{
       name?: string | undefined;
@@ -68,6 +70,7 @@ export default function SearchFields() {
       payload: { ...search, userId: value },
     });
   }
+  // Set switch boolean value to search state
   function handleSwitchChange(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch({
       type: ActionTypes.Search,
@@ -75,6 +78,7 @@ export default function SearchFields() {
     });
   }
 
+  if (!globalContext) return null;
   return (
     <Paper className={classes.Paper} elevation={4}>
       <h2>Search</h2>
@@ -84,6 +88,7 @@ export default function SearchFields() {
         justifyContent="space-between"
         alignItems="center"
       >
+        {/* Task name search input */}
         <Grid item>
           <TextField
             className={classes.TextField}
@@ -95,6 +100,8 @@ export default function SearchFields() {
             value={search.name}
           />
         </Grid>
+
+        {/* User Selector */}
         <Grid item>
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel>User</InputLabel>
@@ -118,9 +125,10 @@ export default function SearchFields() {
             </Select>
           </FormControl>
         </Grid>
+
+        {/* Only enable when Input text or Select user have value*/}
         <Grid item>
           <label htmlFor="completed">Completed</label>
-
           <Switch
             disabled={search.name === "" && search.userId === ""}
             icon={<RadioButtonUncheckedOutlinedIcon fontSize="small" />}

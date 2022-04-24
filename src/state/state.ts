@@ -1,11 +1,11 @@
-// import { Todo, User, EditTodo } from "../types";
-
+// User for the Tasks
 export interface User {
   id: string;
   firstName: string;
   lastName: string;
 }
 
+// Tasks to be display/delete
 export interface Todo {
   id: string;
   name: string;
@@ -13,12 +13,14 @@ export interface Todo {
   isComplete: boolean;
 }
 
+// Tasks prepared for save into database
 export interface NewTodo {
   name: string;
   user: string;
   isComplete: boolean;
 }
 
+// Temporary task load from database, ready to be edit and save
 export interface TempTodo {
   id: string;
   name: string;
@@ -26,6 +28,7 @@ export interface TempTodo {
   isComplete: boolean;
 }
 
+// Put all search query text/userId in here, ready for be used in filter query
 export interface SearchTodo {
   name: string;
   userId: string | number;
