@@ -74,7 +74,7 @@ export default function TodoList() {
 
   if (!globalContext) return null;
   return (
-    <TableContainer className={classes.table} component={Paper}>
+    <TableContainer className={classes.table} component={Paper} elevation={4}>
       <Table aria-label="todo table">
         <TableHead>
           <TableRow>
@@ -88,7 +88,7 @@ export default function TodoList() {
           {state.search.name || state.search.userId ? (
             todos
               .filter((todo) => {
-                const { name, userId } = state.search;
+                const { name, userId, isComplete } = state.search;
 
                 const regex = new RegExp(name, "gi");
                 const nameMatch = todo.name.search(regex) !== -1;
@@ -96,8 +96,9 @@ export default function TodoList() {
                 if (userId) {
                   userMatch = todo.user === userId;
                 }
+                const isCompleteMatch = isComplete === todo.isComplete;
 
-                return nameMatch && userMatch;
+                return nameMatch && userMatch && isCompleteMatch;
               })
               .map((todo) => {
                 const userQuery: User = Object.values(users).filter((user) => {

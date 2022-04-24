@@ -5,6 +5,7 @@ import {
   InputLabel,
   makeStyles,
   MenuItem,
+  Paper,
   Select,
   Switch,
   TextField,
@@ -19,6 +20,9 @@ import { useGlobalContext } from "../../state/context";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    Paper: {
+      padding: theme.spacing(2),
+    },
     Grid: {
       marginTop: 24,
       gap: theme.spacing(2),
@@ -65,9 +69,6 @@ export default function SearchFields() {
     });
   }
   function handleSwitchChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = !e.target.checked;
-    console.log("value: ", value);
-
     dispatch({
       type: ActionTypes.Search,
       payload: { ...search, isComplete: e.target.checked },
@@ -75,59 +76,62 @@ export default function SearchFields() {
   }
 
   return (
-    <Grid
-      className={classes.Grid}
-      container
-      justifyContent="space-between"
-      alignItems="center"
-      // spacing={2}
-    >
-      <Grid item>
-        <TextField
-          className={classes.TextField}
-          label="Project Name"
-          type="text"
-          name="searchInput"
-          variant="outlined"
-          onChange={handleInputChange}
-          value={search.name}
-        />
-      </Grid>
-      <Grid item>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel>User</InputLabel>
-          <Select
-            label="User"
-            name="searchSelect"
-            value={search.userId}
-            onChange={handleSelectChange}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {state.users.map((user) => {
-              return (
-                <MenuItem
-                  key={`User-${user.id}`}
-                  value={user.id}
-                >{`${user.firstName} ${user.lastName}`}</MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid item>
-        <label htmlFor="completed">Completed</label>
+    <Paper className={classes.Paper} elevation={4}>
+      <h2>Search</h2>
+      <Grid
+        className={classes.Grid}
+        container
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item>
+          <TextField
+            className={classes.TextField}
+            label="Project Name"
+            type="text"
+            name="searchInput"
+            variant="outlined"
+            onChange={handleInputChange}
+            value={search.name}
+          />
+        </Grid>
+        <Grid item>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel>User</InputLabel>
+            <Select
+              label="User"
+              name="searchSelect"
+              value={search.userId}
+              onChange={handleSelectChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {state.users.map((user) => {
+                return (
+                  <MenuItem
+                    key={`User-${user.id}`}
+                    value={user.id}
+                  >{`${user.firstName} ${user.lastName}`}</MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item>
+          <label htmlFor="completed">Completed</label>
 
-        <Switch
-          icon={<RadioButtonUncheckedOutlinedIcon fontSize="small" />}
-          checkedIcon={<CheckCircleOutlineOutlinedIcon fontSize="small" />}
-          checked={search.isComplete}
-          onChange={handleSwitchChange}
-          name="checked"
-          color="primary"
-        />
+          <Switch
+            disabled={search.name === "" && search.userId === ""}
+            icon={<RadioButtonUncheckedOutlinedIcon fontSize="small" />}
+            checkedIcon={<CheckCircleOutlineOutlinedIcon fontSize="small" />}
+            checked={search.isComplete}
+            onChange={handleSwitchChange}
+            name="completed"
+            color="primary"
+          />
+        </Grid>
       </Grid>
-    </Grid>
+    </Paper>
   );
 }
