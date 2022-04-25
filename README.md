@@ -1,3 +1,46 @@
+# BlueSky React-TypeScript Todo-APP Task
+
+## Challenges
+
+- implement `useContext` and `useReducer`
+- planning components/functions
+
+## Questions
+
+- reducer best practices
+- Fix server.ts: to create a new todo, has to query user modal and warp with request data
+- Add feature server.ts: to patch existing todo
+
+```javascript
+this.post("/todo/create", (schema: any, request) => {
+	let attrs = JSON.parse(request.requestBody);
+
+	const user = schema.users.find(attrs.user);
+	return schema.todos.create({ ...attrs, user });
+}
+
+this.patch("/todo/:id/edit", (schema: any, request) => {
+	const todoId = request.params.id;
+	let attrs = JSON.parse(request.requestBody);
+
+	const todo = schema.todos.find(todoId).update(attrs);
+
+	return {
+		todo: todo,
+	};
+});
+```
+
+## Takeaways
+
+- Mirage js Server for mocking server API
+- Redux-like state management
+- Material UI implement
+
+---
+
+# Original task description
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Steps setup to the App
@@ -14,7 +57,7 @@ some these will need to be installed and set up
 - [Axios](https://github.com/axios/axios)
 - Typescript
 
-### Reqirements
+### Requirements
 
 - List Tasks
 - Filter tasks by name, user, is completed
