@@ -1,5 +1,7 @@
 # BlueSky React-TypeScript Todo-APP Task
 
+![](./documentation/Todo-APP.png)
+
 ## Challenges
 
 - implement `useContext` and `useReducer`
