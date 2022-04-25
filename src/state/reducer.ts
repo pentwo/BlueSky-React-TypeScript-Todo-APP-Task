@@ -96,9 +96,16 @@ export const asyncActionHandlers: AsyncActionHandlers<
     ({ dispatch }) =>
     async (action) => {
       const result = await getTodos();
+      result.sort(function (
+        a: { isComplete: boolean },
+        b: { isComplete: boolean }
+      ) {
+        return a.isComplete === b.isComplete ? 0 : a.isComplete ? -1 : 1;
+      });
 
       dispatch({ type: ActionTypes.RefreshTodoList, payload: result });
     },
+
   REFRESH_USER:
     ({ dispatch }) =>
     async (action) => {
