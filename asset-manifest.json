@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/BlueSky-React-TypeScript-Todo-APP-Task/static/css/main.5facb584.chunk.css",
+    "main.js": "/BlueSky-React-TypeScript-Todo-APP-Task/static/js/main.abe89dde.chunk.js",
+    "main.js.map": "/BlueSky-React-TypeScript-Todo-APP-Task/static/js/main.abe89dde.chunk.js.map",
+    "runtime-main.js": "/BlueSky-React-TypeScript-Todo-APP-Task/static/js/runtime-main.ec88809e.js",
+    "runtime-main.js.map": "/BlueSky-React-TypeScript-Todo-APP-Task/static/js/runtime-main.ec88809e.js.map",
+    "static/js/2.e4fd5014.chunk.js": "/BlueSky-React-TypeScript-Todo-APP-Task/static/js/2.e4fd5014.chunk.js",
+    "static/js/2.e4fd5014.chunk.js.map": "/BlueSky-React-TypeScript-Todo-APP-Task/static/js/2.e4fd5014.chunk.js.map",
+    "index.html": "/BlueSky-React-TypeScript-Todo-APP-Task/index.html",
+    "precache-manifest.7881d286e070e029fdae2a6d1b80015b.js": "/BlueSky-React-TypeScript-Todo-APP-Task/precache-manifest.7881d286e070e029fdae2a6d1b80015b.js",
+    "service-worker.js": "/BlueSky-React-TypeScript-Todo-APP-Task/service-worker.js",
+    "static/css/main.5facb584.chunk.css.map": "/BlueSky-React-TypeScript-Todo-APP-Task/static/css/main.5facb584.chunk.css.map",
+    "static/js/2.e4fd5014.chunk.js.LICENSE.txt": "/BlueSky-React-TypeScript-Todo-APP-Task/static/js/2.e4fd5014.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ec88809e.js",
+    "static/js/2.e4fd5014.chunk.js",
+    "static/css/main.5facb584.chunk.css",
+    "static/js/main.abe89dde.chunk.js"
+  ]
+}
