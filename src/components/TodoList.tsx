@@ -45,7 +45,7 @@ export default function TodoList() {
   // Loading global context
   const globalContext = useGlobalContext();
   const { state, dispatch } = globalContext;
-  const { todos, users } = state;
+  const { todos, users, search } = state;
 
   // When modal closed, clear temporary todo
   const handleModalClose = () => {
@@ -98,10 +98,10 @@ export default function TodoList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {state.search.name || state.search.userId ? (
+            {search.name || search.userId ? (
               todos
                 .filter((todo) => {
-                  const { name, userId, isComplete } = state.search;
+                  const { name, userId, isComplete } = search;
 
                   const regex = new RegExp(name, "gi");
                   const nameMatch = todo.name.search(regex) !== -1;
