@@ -6,7 +6,7 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import "./App.css";
 import SearchFields from "./components/SearchFields";
 import TodoList from "./components/TodoList";
-import AddTask from "./components/AddTask";
+import AddTodo from "./components/AddTodo";
 
 // New implementation
 import { initialState } from "./state/state";
@@ -60,7 +60,7 @@ function App() {
           </Box>
           {/* Add Task MODAL*/}
           <Modal open={addTaskModalState} onClose={handleModalClose}>
-            <AddTask handleModalClose={handleModalClose} />
+            <AddTodo handleModalClose={handleModalClose} />
           </Modal>
         </Container>
       </div>

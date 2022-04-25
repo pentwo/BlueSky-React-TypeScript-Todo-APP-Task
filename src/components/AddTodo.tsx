@@ -31,7 +31,7 @@ interface AddTask {
   handleModalClose: () => void;
 }
 
-export default function AddTask({ handleModalClose }: AddTask) {
+export default function AddTodo({ handleModalClose }: AddTask) {
   const classes = useStyles();
 
   // Loading global context
